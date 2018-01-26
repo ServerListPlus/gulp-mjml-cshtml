@@ -1,12 +1,12 @@
 {
-  "name": "gulp-mjml",
-  "version": "2.3.0",
-  "description": "Add Gulp to your MJML workflow",
+  "name": "gulp-mjml-cshtml",
+  "version": "1.0.7",
+  "description": "Compile mjml to cshtml with Gulp",
   "main": "src/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Guillaume Badi <gbadi@mailjet.com> (http://github.com/GuillaumeBadi)",
+  "author": "Wouter Florijn <woutermflorijn@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "gulp": "^3.9.0",

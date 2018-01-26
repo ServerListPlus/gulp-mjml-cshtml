@@ -10,7 +10,7 @@ Add Gulp to your MJML workflow!
 ``` javascript
 
 var gulp = require('gulp')
-var mjml = require('gulp-mjml')
+var mjml = require('gulp-mjml-cshtml')
 
 gulp.task('default', function () {
   return gulp.src('./test.mjml')
@@ -25,7 +25,7 @@ gulp.task('default', function () {
 ``` javascript
 
 var gulp = require('gulp')
-var mjml = require('gulp-mjml')
+var mjml = require('gulp-mjml-cshtml')
 
 // Require your own components if needed, and your mjmlEngine (possibly with options)
 // require('./components')

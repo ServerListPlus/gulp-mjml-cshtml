@@ -14,6 +14,26 @@ function error (file) {
   }
 }
 
+function html2cshtml (s) {
+  return newLineAfterModel(replaceCssDirectives(s))
+}
+
+function replaceCssDirectives (s) {
+  var regex = /<style[^>]*>([^<]*)<\/style>/g
+
+  return s.replace(regex, function (match) {
+    return match.replace(/@/g, '@@ ')
+  })
+}
+
+function newLineAfterModel (s) {
+  var regex = /@model [a-zA-Z\.]*/g
+
+  return s.replace(regex, function (match) {
+    return match + "\n"
+  })
+}
+
 module.exports = function mjml (mjmlEngine, options) {
   if(!mjmlEngine) {
     mjmlEngine = mjmlDefaultEngine
@@ -44,13 +64,14 @@ module.exports = function mjml (mjmlEngine, options) {
 
       try {
         render = mjmlEngine.mjml2html(file.contents.toString(), localOptions)
+        render.cshtml = html2cshtml(render.html)
       } catch (e) {
         this.emit('error', raise(e.message))
         return callback()
       }
 
-      output.contents = new Buffer(render.html)
-      output.path = gutil.replaceExtension(file.path.toString(), '.html')
+      output.contents = new Buffer(render.cshtml)
+      output.path = gutil.replaceExtension(file.path.toString(), '.cshtml')
       this.push(output)
     }
     return callback()
