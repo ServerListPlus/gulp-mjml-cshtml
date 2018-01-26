@@ -1,6 +1,6 @@
 {
   "name": "gulp-mjml-cshtml",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Compile mjml to cshtml with Gulp",
   "main": "src/index",
   "scripts": {

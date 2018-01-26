@@ -22,7 +22,7 @@ function replaceCssDirectives (s) {
   var regex = /<style[^>]*>([^<]*)<\/style>/g
 
   return s.replace(regex, function (match) {
-    return match.replace(/@/g, '@@ ')
+    return match.replace(/@/g, '@@')
   })
 }
 
