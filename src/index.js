@@ -1,24 +1,21 @@
-var through = require ('through2')
-var mjmlDefaultEngine = require ('mjml')
-var gutil = require ('gulp-util')
+const through           = require("through2");
+const mjmlDefaultEngine = require("mjml");
+const replaceExt        = require("replace-ext");
+const PluginError       = require("plugin-error");
 
-var GulpError = gutil.PluginError
-var NAME = 'MJML'
+const NAME = "MJML";
 
-function error (file) {
+function error(file) {
   return function (message) {
-    return new GulpError(
-      NAME,
-      'Error in file ' + file + ': ' + message
-    )
-  }
+    return new PluginError(NAME, "Error in file " + file + ": " + message);
+  };
 }
 
-function html2cshtml (s) {
+function html2cshtml(s) {
   return newLineAfterModel(replaceCssDirectives(s))
 }
 
-function replaceCssDirectives (s) {
+function replaceCssDirectives(s) {
   var regex = /<style[^>]*>([^<]*)<\/style>/g
 
   return s.replace(regex, function (match) {
@@ -26,7 +23,7 @@ function replaceCssDirectives (s) {
   })
 }
 
-function newLineAfterModel (s) {
+function newLineAfterModel(s) {
   var regex = /@model [a-zA-Z\.]*/g
 
   return s.replace(regex, function (match) {
@@ -34,46 +31,47 @@ function newLineAfterModel (s) {
   })
 }
 
-module.exports = function mjml (mjmlEngine, options) {
-  if(!mjmlEngine) {
-    mjmlEngine = mjmlDefaultEngine
+module.exports = function mjml(mjmlEngine, options) {
+  if (!mjmlEngine) {
+    mjmlEngine = mjmlDefaultEngine;
   }
   if (options === undefined) {
-    options = {}
+    options = {};
   }
 
   return through.obj(function (file, enc, callback) {
-
     // Not a big fan of this deep copy methods
     // But it will work regardless of Node version
-    var localOptions = JSON.parse(JSON.stringify(options))
+    const localOptions = JSON.parse(JSON.stringify(options));
     if (localOptions.filePath === undefined) {
-      localOptions.filePath = file.path.toString()
+      localOptions.filePath = file.path.toString();
     }
 
-    const raise = error(localOptions.filePath)
+    const raise = error(localOptions.filePath);
 
     if (file.isStream()) {
-      this.emit('error', raise('Streams are not supported!'))
-      return callback()
+      this.emit("error", raise("Streams are not supported!"));
+      return callback();
     }
 
     if (file.isBuffer()) {
-      var output = file.clone()
-      var render
+      const output = file.clone();
+      let render;
 
       try {
-        render = mjmlEngine.mjml2html(file.contents.toString(), localOptions)
-        render.cshtml = html2cshtml(render.html)
-      } catch (e) {
-        this.emit('error', raise(e.message))
-        return callback()
+        render        = mjmlEngine(file.contents.toString(), localOptions);
+        render.cshtml = html2cshtml(render.html);
+      }
+      catch (e) {
+        this.emit("error", raise(e.message));
+        return callback();
       }
 
-      output.contents = new Buffer(render.cshtml)
-      output.path = gutil.replaceExtension(file.path.toString(), '.cshtml')
-      this.push(output)
+      // [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues
+      output.contents = Buffer.from(render.cshtml);
+      output.path     = replaceExt(file.path.toString(), localOptions.fileExt || ".cshtml");
+      this.push(output);
     }
-    return callback()
-  })
-}
+    return callback();
+  });
+};

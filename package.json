@@ -1,17 +1,30 @@
 {
   "name": "gulp-mjml-cshtml",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "description": "Compile mjml to cshtml with Gulp",
   "main": "src/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Wouter Florijn <woutermflorijn@gmail.com>",
+  "contributors": [
+    "Max Korlaar <max@maxkorlaar.com>"
+  ],
+  "keywords": [
+    "gulpplugin"
+  ],
   "license": "MIT",
   "dependencies": {
-    "gulp": "^3.9.0",
-    "gulp-util": "^3.0.7",
-    "mjml": "^3.3.5",
-    "through2": "^2.0.0"
+    "mjml": "^4.0.0",
+    "plugin-error": "^1.0.1",
+    "replace-ext": "^1.0.0",
+    "through2": "^3.0.1"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ServerListPlus/gulp-mjml-cshtml.git"
   }
 }
