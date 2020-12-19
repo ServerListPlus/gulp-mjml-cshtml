@@ -60,7 +60,7 @@ module.exports = function mjml(mjmlEngine, options) {
 
       try {
         render        = mjmlEngine(file.contents.toString(), localOptions);
-        render.cshtml = html2cshtml(render.html);
+        render.cshtml = (html2cshtml(render.html)).trim();
       }
       catch (e) {
         this.emit("error", raise(e.message));
